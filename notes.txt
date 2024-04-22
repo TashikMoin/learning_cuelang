@@ -1,0 +1,52 @@
+cue mod init github.com/tashikmoin/learning_cuelang
+# command to initialize a cue module
+
+
+curl -sO https://json.schemastore.org/github-workflow.json
+# fetching github-workflow json schema from schemastore
+
+
+
+
+
+cue import -l "#Workflows:" -p github_workflow jsonschema: github-workflow.json
+
+#  cue import: This is a command from the CUE command line tools that imports data from another format (like JSON, YAML, or JSON Schema) into CUE format.
+
+#  -l "#Workflow:": This option specifies a label to apply to the top-level structure in the resulting CUE file. The label #Workflow: here will annotate the top-level 
+    structure, making it clear that this schema represents a GitHub Workflow. It serves as a documentation or organization aid within the CUE environment.
+
+#  -p github_workflow: This sets the package name of the resulting CUE file to github. In CUE, a package name helps group and encapsulate related definitions. All the generated 
+    CUE definitions from this import will be within the github package. Give your package any name, it does not have to match with pkg directory structure.
+
+#  jsonschema:: This tells the cue import command that the following file is in JSON Schema format. This specifier helps CUE understand how to parse and transform the input file.
+
+#  github-workflow.json: This is the input file you downloaded using curl, which contains the JSON Schema for GitHub workflows.
+
+
+
+
+mv github-workflow.cue pkg/json.schemastore.org/github/
+mv github-workflow.json pkg/json.schemastore.org/github/
+
+# moving json, cue schemas to github directory (github namespace to gather all github related packages in one place, this is best practice).
+
+
+
+cue import -p workflows -l 'strings.Replace(name, " ", "", -1)' *.yaml
+# Command to convert all your existing .yaml workflows to .cue under same package/namesapce "workflows"
+
+
+cue export --out <formet here yaml or json> .
+# converts cue files of your packages in current directory to yaml or json format 
+
+cue eval <cue file name or directory where your .cue files are stored>
+# Features of cue eval
+# Output: gives output in cue format and if there are any errors in any file it gives error message.
+# Resolution of Values: It resolves the values of all fields, including any computations or references to other fields within the same CUE scope.
+# Validation: It validates the constraints and ensures that all field values comply with the specified types and restrictions.
+# Unification: It unifies multiple definitions and constraints, combining them into a coherent and consistent output that satisfies all given constraints.
+# Defaults: It applies default values to fields where defaults are specified and no other value is given.
+# -i, --ignore-errors: Continue in the face of errors.
+# -e, --expression: Evaluate the value of a specific expression within the CUE files.
+# --out: Specify the output format, such as json or yaml.
